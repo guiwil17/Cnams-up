@@ -1,16 +1,16 @@
 import Element from './Element';
 
 class ArbreBinaire {
-    constructor(racine, equipe, manche) {
-        this.racine = new Element(racine, equipe, manche);
+    constructor(racine, equipe, manche, point) {
+        this.racine = new Element(racine, equipe, manche, point);
      }
 
-     ajouter(valeur, equipe, manche){
+     ajouter(valeur, equipe, manche, point){
          if(this.racine === null){
-             this.racine = new Element(valeur, equipe, manche)
+             this.racine = new Element(valeur, equipe, manche, point)
          }
          else{
-             this.racine.ajouter(valeur, equipe, manche)
+             this.racine.ajouter(valeur, equipe, manche, point)
          }
      }
 
@@ -19,20 +19,23 @@ class ArbreBinaire {
      }
 
      getHauteur(){
+        var hauteur;
          if(this.racine === null){
-             var hauteur = 0;
+             hauteur = 0;
          }
          else{
-             var hauteur = this.racine.hauteur;
+             hauteur = this.racine.hauteur;
          }
+         return hauteur
      }
 
      getTaille(){
+         var taille;
          if(this.racine === null){
-             var taille = 0;
+             taille = 0;
          }
          else{
-             var taille = this.racine.taille()
+             taille = this.racine.taille()
          }
          return taille;
      }

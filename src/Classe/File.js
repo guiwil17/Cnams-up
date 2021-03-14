@@ -11,7 +11,7 @@ class File {
      }
 
      enfiler(valeur){
-         if(this.longueur == 0){
+         if(this.longueur === 0){
              this.debut = this.fin = new Noeud(valeur)
          }
          else{

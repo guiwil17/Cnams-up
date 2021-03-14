@@ -1,34 +1,35 @@
 class Element {
-    constructor(valeur, equipe, manche){
+    constructor(valeur, equipe, manche, point){
         this.valeur = valeur;
         this.equipe = equipe;
+        this.point = point;
         this.manche = manche;
         this.filsDroit = null;
         this.filsGauche = null;
     }
 
-    ajouter(valeur, equipe, manche){
-        if(valeur < this.valeur){
+    ajouter(valeur, equipe, manche, point){
+        if(equipe === "equipe 1"){
             if(this.filsGauche === null){
-                this.filsGauche = new Element(valeur, equipe, manche);
+                this.filsGauche = new Element(valeur, equipe, manche, point);
             }
             else{
-                this.filsGauche.ajouter(valeur, equipe, manche);
+                this.filsGauche.ajouter(valeur, equipe, manche, point);
             }
         }
-        else if(valeur > this.valeur){
+        else if(equipe === "equipe 2"){
             if(this.filsDroit === null){
-                this.filsDroit = new Element(valeur, equipe, manche)
+                this.filsDroit = new Element(valeur, equipe, manche, point)
             }
             else{
-                this.filsDroit.ajouter(valeur, equipe, manche);
+                this.filsDroit.ajouter(valeur, equipe, manche, point);
             }
         }    
     }
 
     afficher(level){
         
-        var level = level || 0;
+        level = level || 0;
         console.log(" ")
         console.log(this.valeur)
         console.log(this.equipe)
@@ -43,55 +44,61 @@ class Element {
     }
 
     hauteur(){
+        var gauche;
+        var droit;
         if(this.filsGauche === null){
-            var gauche = 0
+            gauche = 0
         }
         else{
-            var gauche =  this.filsGauche.hauteur()
+            gauche =  this.filsGauche.hauteur()
         }
         if(this.filsDroit === null){
-            var droit = 0
+            droit = 0
         }
         else {
-            var droit = this.filsDroit.hauteur()
+            droit = this.filsDroit.hauteur()
         }
         return 1 + Math.max(gauche, droit);
     }
 
     taille(){
+        var gauche;
+        var droit;
         if(this.filsGauche === null){
-            var gauche = 0
+            gauche = 0
         }
         else{
-            var gauche = this.filsGauche.taille()
+            gauche = this.filsGauche.taille()
         }
         if(this.filsDroit === null){
-            var droit = 0;
+            droit = 0;
         }
         else{
-            var droit = this.filsDroit.taille()
+            droit = this.filsDroit.taille()
         }
 
         return 1 + gauche + droit;
     }
 
     minimum(){
+        var minimum;
         if(this.filsGauche === null){
-            var minimum = 0
+            minimum = 0
         }
         else {
-            var minimum = this.filsDroit.minimum()
+            minimum = this.filsDroit.minimum()
         }
 
         return minimum;
     }
 
     maximum(){
+        var maximum;
         if(this.filsDroit === null){
-            var maximum = 0
+            maximum = 0
         }
         else {
-            var maximum = this.filsGauche.maximum()
+            maximum = this.filsGauche.maximum()
         }
 
         return maximum;

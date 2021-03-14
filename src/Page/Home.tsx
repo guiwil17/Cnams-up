@@ -1,9 +1,14 @@
 import React from 'react';
-import AOS from 'aos';
-import { makeStyles, Theme, withStyles } from '@material-ui/core/styles';
-import 'aos/dist/aos.css';
-import { Grid, Typography, Button } from '@material-ui/core';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { Grid, Typography, Button, useMediaQuery, Dialog } from '@material-ui/core';
 import Game from './Game';
+import ListeChaine from '../Classe/ListeChaine';
+import Maillon from '../Classe/Maillon';
+import * as data from './Game/data.json';
+import carte from '../img/carte.png'
+import logo from '../img/logo.png'
+import teamimg from '../img/team.png'
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -13,41 +18,332 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   titre:{
-    height: "50vh"
+    height: "70vh"    
   },
-  start:{
-    backgroundColor: "#4897D8",
+  fond:{
+    backgroundColor: "#ffd3b8"
+  },
+  fond2:{
+    height: "20vh",
+  },
+  start:{  
+  },
+  titre2:{
+    height: "50vh"
+  }, 
+  bandeau:{
+    height: "10vh",
+    backgroundColor: "#df4937"
+  },     
+  alignement:{
+    textAlign: "center",
+  },  
+  bouton:{
+    height: "20vh",
   }
 }));
+
+
+var test = new ListeChaine();
+
+
+//Création d'une liste chainée ici
+
+const Liste = () =>{
+  //console.log(data.celebrite[1]);
+  for(var i=0; i < data.item.length; i++){
+    var nbr = [3,15,2];
+    var trouve: number[] = [] 
+    for(var j=0;j < nbr[i]; j++){
+      let indice = Math.floor(Math.random()*data.item[i].length)
+      if(trouve.indexOf(indice) === -1){
+        let m = new Maillon(data.item[i][indice])
+        test.Ajouter(m)
+        trouve.push(indice)
+      }
+      else{
+        j--;
+      }
+    }
+  }
+  test.Afficher()
+}
+Liste()
+
+
 const Home: React.FC<{}> = () => {
   const classes = useStyles();
+  const theme = useTheme();
   const [play,setPlay] = React.useState(false);
+  const [reset, setReset] = React.useState(test);
+  const [team, setTeam] = React.useState(false);
+  const [manche, setManche] = React.useState(false);
+  const taille = useMediaQuery(theme.breakpoints.down('sm')); 
+
 
   const Start = () =>{
     console.log("ici")
-    setPlay(true);
+    setTeam(true)
   }
+
+  const End = () => {
+    setPlay(false);
+    setReset(Liste());
+  }
+
+
+  const CloseTeam = () =>{
+    setTeam(false)
+    setManche(true)
+  }
+
+  const CloseManche = () => {
+    setManche(false)
+    setPlay(true)
+  }
+
+  const Liste = () =>{
+    var test = new ListeChaine();
+    //console.log(data.celebrite[1]);
+    for(var i=0; i < data.item.length; i++){
+      var nbr = [3,15,2];
+      var trouve: number[] = [] 
+      for(var j=0;j < nbr[i]; j++){
+        let indice = Math.floor(Math.random()*data.item[i].length)
+        if(trouve.indexOf(indice) === -1){
+          let m = new Maillon(data.item[i][indice])
+          test.Ajouter(m)
+          trouve.push(indice)
+        }
+        else{
+          j--;
+        }
+      }
+    }  
+    return test; 
+  }
+
+
+  const equipe =
+ 
+  
+  <Dialog
+    open={team}
+    fullScreen={true}
+    fullWidth={true}
+        maxWidth= "lg"      
+  >
+    <Grid container className={classes.bandeau}></Grid>    
+      <Grid container justify="center" alignItems="center" className={classes.fond2}>
+        <Grid item xs={12} md={12}>
+          
+            
+            {taille === false &&
+            <div>
+            <Typography variant="h1" component="h3" gutterBottom className={classes.alignement}> Manche 1</Typography>
+            <Typography variant="h3" component="h2" gutterBottom className={classes.alignement}>Règle</Typography>  
+            </div>
+            }
+            {taille &&
+            <div>
+            <Typography variant="h2" component="h3" gutterBottom className={classes.alignement}> Manche 1</Typography>
+            <Typography variant="h4" component="h4" gutterBottom className={classes.alignement}> Règle</Typography>  
+            </div>
+            }
+           
+        </Grid>
+      </Grid>
+  
+    {taille &&
+    <>  
+    <Grid container justify="center" alignItems="center" className={classes.titre2}>
+   
+    <Typography variant="h5" component="h3" gutterBottom className={classes.alignement}> Constitué vos équipes </Typography>
+    <img src={teamimg}  height="150" alt='Logo équipe'></img>
+           
+    </Grid>
+       
+  
+      <Grid container justify="center" alignItems="center">
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={CloseTeam}
+            style={{fontSize: 20 }}
+          >
+          Go
+        </Button>
+      
+      </Grid>
+     </>
+      }    
+       {taille === false &&
+    <>  
+    <Grid container justify="center" alignItems="center" className={classes.titre2}>
+   
+    <Typography variant="h4" component="h3" gutterBottom className={classes.alignement}> Constitué vos équipes <br></br>
+    
+    <img src={teamimg}  height="250" alt='Logo équipe'></img>
+    </Typography>
+   
+           
+           
+    </Grid>
+       
+  
+      <Grid container justify="center" alignItems="center">
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={CloseTeam}
+            style={{fontSize: 30 }}
+          >
+          Go
+        </Button>
+      
+      </Grid>
+     </>
+      }    
+  </Dialog>
+
+const manche1 =
+ 
+  
+<Dialog
+  open={manche}
+  fullScreen={true}
+  fullWidth={true}
+      maxWidth= "lg"      
+>
+  <Grid container className={classes.bandeau}></Grid>    
+    <Grid container justify="center" alignItems="center" className={classes.fond2}>
+      <Grid item xs={12} md={12}>
+        
+          
+          {taille === false &&
+          <div>
+          <Typography variant="h1" component="h3" gutterBottom className={classes.alignement}> Manche 1</Typography>
+          <Typography variant="h3" component="h2" gutterBottom className={classes.alignement}>Règle</Typography>  
+          </div>
+          }
+          {taille &&
+          <div>
+          <Typography variant="h2" component="h3" gutterBottom className={classes.alignement}> Manche 1</Typography>
+          <Typography variant="h4" component="h4" gutterBottom className={classes.alignement}> Règle</Typography>  
+          </div>
+          }
+         
+      </Grid>
+    </Grid>
+
+  {taille &&
+  <>  
+  <Grid container justify="center" alignItems="center" className={classes.titre2}>
+ 
+  <Typography variant="h5" component="h4" gutterBottom className={classes.alignement}> 
+  Vous devez décrire <b>les mots</b>. <br></br>
+  Vous ne pouvez pas <b>prononcer des mots de la même famille</b> ou qui <b>'sonnent pareil'</b>.<br></br>
+   Vous ne pouvez pas traduire les mots ou épeler le mot. <br></br>
+   Vous pouvez passser les mots en <b>touchant la croix</b> ou <b>les valider avec le boutton vert</b>.         </Typography>
+  </Grid>
+     
+
+    <Grid container justify="center" alignItems="center">
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={CloseManche}
+          style={{fontSize: 20 }}
+        >
+           L'équipe 1 commence
+      </Button>
+    
+    </Grid>
+   </>
+    }    
+     {taille === false &&
+  <>  
+  <Grid container justify="center" alignItems="center" className={classes.titre2}>
+ 
+  <Typography variant="h4" component="h6" gutterBottom className={classes.alignement}> 
+  Vous devez décrire <b>les mots</b>. <br></br>
+  Vous ne pouvez pas <b>prononcer des mots de la même famille</b> ou qui <b>'sonnent pareil'</b>.<br></br>
+   Vous ne pouvez pas traduire les mots ou épeler le mot. <br></br>
+   Vous pouvez passser les mots en <b>touchant la croix</b> ou <b>les valider avec le boutton vert</b>.
+         </Typography>
+         
+  </Grid>
+     
+
+    <Grid container justify="center" alignItems="center">
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={CloseManche}
+          style={{fontSize: 30 }}
+        >
+         L'équipe 1 commence
+      </Button>
+    
+    </Grid>
+   </>
+    }    
+</Dialog>
+ 
+
   return (
     <>
     {play===false &&
     <>
-    <Grid container className={classes.titre}>
-    <Grid item md={12}></Grid>
-    <Grid item md={4}></Grid>
-<Grid item xs={12} md={4}><Typography variant="h6">Time's go</Typography></Grid>
-<Grid item xs={12} md={4}></Grid>
+    <Grid container className={classes.bandeau}>
+
     </Grid>
-    <Grid container>
-      <Grid item xs={12} md={4}></Grid>
-      <Grid item xs={12} md={4}>  <Button className={classes.start} onClick={() => {Start()}}>Lancer une partie</Button>
+   
+    <div className={classes.fond}>
+    {taille &&
+    <Grid container className={classes.titre} justify="center" alignItems="center">   
+  
+<Grid item xs={12}  >
+<img src={logo} alt='Logo'></img>
+  </Grid>
+      <img src={carte}  height="300" alt='Logo'></img>
+    </Grid>
+}
+{taille === false &&
+    <Grid container className={classes.titre} justify="center" alignItems="center">   
+  
+<Grid item xs={12}  >
+<img src={logo} height="200" alt='Logo'></img>
+  </Grid>
+  <Grid item xs={12}  >
+      <img src={carte}  height="400" alt='Logo'></img>
       </Grid>
+    </Grid>
+}
+    <Grid container className={classes.bouton}  justify="center" alignItems="center">      
+    <Grid item>  
+    {taille === false &&
+     
+      <Button className={classes.start} onClick={() => {Start()}} style={{fontSize: 32 }}  variant="contained" color="secondary">Lancer une partie</Button>
+      
+    }
+     {taille &&
+     
+     <Button className={classes.start} onClick={() => {Start()}} style={{fontSize: 25 }}   variant="contained" color="secondary">Lancer une partie</Button>
+     
+   }
+     </Grid>
     
       </Grid>
+      </div>
       </>
       }
        {play===true &&
-       <Game/>
+       <Game end={End} reset={reset}/>
        }
+
+       {manche1}
+       {equipe}
     </>
   );
 };

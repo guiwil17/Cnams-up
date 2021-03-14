@@ -14,8 +14,8 @@ import Maillon from './Maillon';
 
     retirerPremiereOccurrence_Rec(l,v) {
 		let retour = l;
-		if(l != null) {		
-			 if(l.valeur == v) {
+		if(l !== null) {		
+			 if(l.valeur === v) {
 				retour = l.suivant;
 			}
 			else {
@@ -29,7 +29,7 @@ import Maillon from './Maillon';
 		var c = this.premier;
 		if(c != null ) {            
 			let premier = this.retirerPremiereOccurrence_Rec(()=>{
-                if (premier == undefined)
+                if (premier === undefined)
                 {
                     return c;
                 }
@@ -50,7 +50,7 @@ import Maillon from './Maillon';
         
       }
      
-      while(liste.length != 0){
+      while(liste.length !== 0){
         var alea  = Math.floor(Math.random()*liste.length);
         let taille = liste[alea];
         var c = this.premier;
