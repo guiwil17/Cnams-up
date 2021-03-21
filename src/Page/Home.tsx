@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Grid, Typography, Button, useMediaQuery, Dialog } from '@material-ui/core';
 import Game from './Game';
@@ -8,7 +8,13 @@ import * as data from './Game/data.json';
 import carte from '../img/carte.png'
 import logo from '../img/logo.png'
 import teamimg from '../img/team.png'
-
+import boing from './boing.mp3'
+import accueil from './accueil.mp3'
+import Audio from "./Game/Audio"
+import {Howl, Howler} from 'howler';
+import VolumeDownIcon from '@material-ui/icons/VolumeDown';
+import VolumeOffIcon from '@material-ui/icons/VolumeOff';
+import LiveHelpIcon from '@material-ui/icons/LiveHelp';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -46,19 +52,29 @@ const useStyles = makeStyles((theme) => ({
 
 var test = new ListeChaine();
 
+const randomize = (tab:[])=>{
+  var i, j, tmp;
+  for (i = tab.length - 1; i > 0; i--) {
+      j = Math.floor(Math.random() * (i + 1));
+      tmp = tab[i];
+      tab[i] = tab[j];
+      tab[j] = tmp;
+  }
+  return tab;
+}
 
 //Création d'une liste chainée ici
 
 const Liste = () =>{
   //console.log(data.celebrite[1]);
+  var tab:any = [];
   for(var i=0; i < data.item.length; i++){
-    var nbr = [3,15,2];
+    var nbr = [4,16,2];
     var trouve: number[] = [] 
     for(var j=0;j < nbr[i]; j++){
       let indice = Math.floor(Math.random()*data.item[i].length)
       if(trouve.indexOf(indice) === -1){
-        let m = new Maillon(data.item[i][indice])
-        test.Ajouter(m)
+        tab.push(data.item[i][indice]);      
         trouve.push(indice)
       }
       else{
@@ -66,7 +82,12 @@ const Liste = () =>{
       }
     }
   }
-  test.Afficher()
+  tab = randomize(tab);
+  for(var v=0;v < tab.length; v++){
+    let m = new Maillon(tab[v]);
+    test.Ajouter(m)
+  }
+  
 }
 Liste()
 
@@ -79,10 +100,12 @@ const Home: React.FC<{}> = () => {
   const [team, setTeam] = React.useState(false);
   const [manche, setManche] = React.useState(false);
   const taille = useMediaQuery(theme.breakpoints.down('sm')); 
+  const [joue, setJoue] = React.useState(false);
 
-
+ 
   const Start = () =>{
     console.log("ici")
+    setJoue(false)
     setTeam(true)
   }
 
@@ -102,25 +125,37 @@ const Home: React.FC<{}> = () => {
     setPlay(true)
   }
 
+  const changeIconeJoue = () => {
+    if(joue){
+      setJoue(false)
+    }
+    else{
+      setJoue(true)
+    }
+  }
+
   const Liste = () =>{
-    var test = new ListeChaine();
-    //console.log(data.celebrite[1]);
+    var tab:any = [];
     for(var i=0; i < data.item.length; i++){
-      var nbr = [3,15,2];
+      var nbr = [4,16,2];
       var trouve: number[] = [] 
       for(var j=0;j < nbr[i]; j++){
         let indice = Math.floor(Math.random()*data.item[i].length)
         if(trouve.indexOf(indice) === -1){
-          let m = new Maillon(data.item[i][indice])
-          test.Ajouter(m)
+          tab.push(data.item[i][indice]);      
           trouve.push(indice)
         }
         else{
           j--;
         }
       }
-    }  
-    return test; 
+    }
+    tab = randomize(tab);
+    for(var v=0;v < tab.length; v++){
+      let m = new Maillon(tab[v]);
+      test.Ajouter(m)
+    }
+    return test
   }
 
 
@@ -293,12 +328,48 @@ const manche1 =
 
   return (
     <>
+   
     {play===false &&
     <>
+    {taille === false && joue === false &&
     <Grid container className={classes.bandeau}>
-
+      <Grid item md={4}><Button><LiveHelpIcon style={{ fontSize: 80 }}/></Button></Grid>
+      <Grid item md={4}></Grid>
+      <Grid item md={4}><Button onClick={()=>changeIconeJoue()}><VolumeOffIcon style={{ fontSize: 80 }}/></Button></Grid>
     </Grid>
-   
+}
+
+{taille === false && joue &&
+    <Grid container className={classes.bandeau}>
+      <Grid item md={4}><Button><LiveHelpIcon style={{ fontSize: 80 }}/></Button></Grid>
+      <Grid item md={4}></Grid>
+      <Grid item md={4}><Button onClick={()=>changeIconeJoue()}><VolumeDownIcon style={{ fontSize: 80 }}/></Button></Grid>
+    </Grid>
+}
+
+{taille && joue === false &&
+
+ 
+    <Grid container className={classes.bandeau}>
+      <Grid item xs={4}><Button><LiveHelpIcon style={{ fontSize: 60 }}/></Button></Grid>
+      <Grid item xs={4}></Grid>
+      <Grid item xs={4}><Button onClick={()=>changeIconeJoue()}><VolumeOffIcon style={{ fontSize: 60 }}/></Button></Grid>
+    </Grid>
+  
+}
+
+{taille && joue &&
+
+ 
+<Grid container className={classes.bandeau}>
+  <Grid item xs={4}><Button><LiveHelpIcon style={{ fontSize: 60 }}/></Button></Grid>
+  <Grid item xs={4}></Grid>
+  <Grid item xs={4}><Button onClick={()=>changeIconeJoue()}><VolumeDownIcon style={{ fontSize: 60 }}/></Button></Grid>
+</Grid>
+
+}
+
+
     <div className={classes.fond}>
     {taille &&
     <Grid container className={classes.titre} justify="center" alignItems="center">   
@@ -344,6 +415,10 @@ const manche1 =
 
        {manche1}
        {equipe}
+      
+         <Audio joue={joue}/>
+       
+       
     </>
   );
 };

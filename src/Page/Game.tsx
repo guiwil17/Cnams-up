@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Grid, Button,Dialog,  DialogActions, useMediaQuery } from '@material-ui/core';
 import Affichage from './Game/Affichage'
@@ -11,6 +11,10 @@ import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
 import mot from '../img/mot.png'
 import GroupIcon from '@material-ui/icons/Group';
+import yes from './yes.mp3'
+import no from './no.mp3'
+import chrono from './chrono.mp3'
+import {Howl, Howler} from 'howler';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -56,14 +60,14 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-
+var c:any;
 var file = new File();
 const Game = (props: any) => {
   const equipe = [0,1]  
   const theme = useTheme();
   const classes = useStyles();
   const [valeur, SetValeur] = React.useState(props.reset.premier.valeur)
-  const [position, SetPosition] = React.useState(props.reset.premier)
+  const [position, SetPosition] = React.useState(props.reset.premier.suivant)
   const [team, SetTeam] = React.useState(equipe[0])
   const [go, SetGo] = React.useState(true)
   const [open, setOpen] = React.useState(false);
@@ -74,10 +78,34 @@ const Game = (props: any) => {
   const [resultat, setResultat] = React.useState(new ArbreBinaire(-1, "début", 0));
   const [reset, setReset] = React.useState(false);
   const taille = useMediaQuery(theme.breakpoints.down('sm'));
+  const [stop, setPause] = React.useState(false);
 
+  var sound1 = new Howl({
+    src: [yes],
+  });
+  var sound = new Howl({
+    src: [no],
+  });
+
+  var ch = new Howl({
+    src: [chrono],
+    html5: true
+  });
+ 
+  const  play = () => {
+    ch.play();
+    c = ch;
+
+  }
+  useEffect(()=>{
+      play()
+    
+    
+  },[])
+ 
   const change = () => {
+    sound1.play();
     if(position.suivant === null && file.longueur !== 0){
-      console.log("ici")
       SetValeur(file.defiler().valeur);
       if(team === 0){
         setPoints1(point_equipe1+1)
@@ -87,13 +115,19 @@ const Game = (props: any) => {
       }
     }
     else if (position.suivant === null && file.longueur === 0){
-      console.log("Manche fini")
+      
+      c.stop();
+    setPause(true);
       if(team === 0){
+        setPoints1(point_equipe1+1)
         SetTeam(1)
+        
        
       }
       else{
-        SetTeam(0)       
+        setPoints2(point_equipe2+1)    
+        SetTeam(0)   
+        
       }
       resultat.ajouter(manche*10, "equipe 1", manche+1,point_equipe1);    
       resultat.ajouter(manche*10*3, "equipe 2", manche+1,point_equipe2);
@@ -107,20 +141,21 @@ const Game = (props: any) => {
       handleOpenManche()
     }
     else{
-      SetPosition(position.suivant);
-      SetValeur(position.valeur);
+      console.log(position.valeur)
+     
       if(team === 0){
         setPoints1(point_equipe1+1)
       }
       else{
         setPoints2(point_equipe2+1)
       }    
+      SetPosition(position.suivant);
+      SetValeur(position.valeur);
     }
     
   }
   const timeOut = () => {
-    console.log("remise à 0")    
-    SetGo(false)
+    SetGo(false)    
     if(team === 0){
       SetTeam(1)
       handleOpen()
@@ -138,10 +173,9 @@ const Game = (props: any) => {
 
   const AddManche = () =>{
     setManche(manche+1)
-    console.log(manche)
     if(manche < 2){
       SetValeur(props.reset.premier.valeur)
-      SetPosition(props.reset.premier)
+      SetPosition(props.reset.premier.suivant)
       SetGo(true)      
     }    
     else{
@@ -151,20 +185,24 @@ const Game = (props: any) => {
   }
   const handleOpenManche = () => {    
     setOpenManche(true)
+    ch.pause();
   }
 
   const handleCloseManche = () => {
     setOpenManche(false)    
+    play();
   }
   
 
   const handleOpen = () => {
     setOpen(true)
+    ch.pause()
   }
 
   const handleClose = () => {    
       SetGo(true)
       setOpen(false)   
+      play();
   }
   const modal =
     <Dialog
@@ -204,15 +242,14 @@ const Game = (props: any) => {
     </Dialog>
 
   const Passer = () => { 
+    sound.play();
     var noeud = new Noeud(valeur)      
     file.enfiler(noeud);
-    console.log(file.longueur)
     if(position.suivant !== null){
       SetPosition(position.suivant);
       SetValeur(position.valeur);
     }    
     else{
-      console.log("ici")
       SetValeur(file.defiler().valeur);
     }
     }

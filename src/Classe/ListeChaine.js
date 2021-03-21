@@ -38,8 +38,7 @@ import Maillon from './Maillon';
                 }
             },v);
 		}
-	}
-
+	}   
 	
     Melanger(){
       var liste = []

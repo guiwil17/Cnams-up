@@ -14,7 +14,6 @@
     "@types/react-dom": "^17.0.1",
     "@types/react-router-dom": "^5.1.7",
     "aos": "^2.3.4",
-    "howler": "^2.2.1",
     "json-loader": "^0.5.7",
     "material-icons": "^0.5.4",
     "react": "^17.0.1",
@@ -54,6 +53,8 @@
   "devDependencies": {
     "@types/aos": "^3.0.3",
     "@types/howler": "^2.2.1",
-    "@types/react-howler": "^3.7.2"
-  }
+    "@types/react-howler": "^3.7.2",
+    "howler": "^2.2.1"
+  },
+  "homepage": "http://emilie-et-guillaume.com"
 }

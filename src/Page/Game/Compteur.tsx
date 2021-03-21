@@ -1,12 +1,13 @@
 import * as React from 'react';
 
+
 const Compteur = (props: any) => {
-  const [compte, SetCompte] = React.useState(10);
- 
+  const [compte, SetCompte] = React.useState(30);
+
   React.useEffect(()=>{
     
     const s = setInterval(() => {    
-      if(props.reset === true){
+      if(props.reset === true){        
         SetCompte(30)
         props.changeReset()
       }
@@ -16,7 +17,8 @@ const Compteur = (props: any) => {
     }
     else{
       props.timeout()
-      SetCompte(10)
+      SetCompte(30)
+      
     }
   }
       }, 1000);
