@@ -71,22 +71,16 @@ const Manche = (props: any) => {
         console.log(racine.equipe)
         if(racine.equipe === "equipe 1"){
 
-         equipe1[racine.manche-1] = racine.point      
-         console.log( racine.valeur )  
-         console.log( racine.manche )      
+         equipe1[racine.manche-1] = racine.point          
         }
         else if (racine.equipe === "equipe 2"){
-          equipe2[racine.manche-1] = racine.point          
-          console.log( racine.valeur )  
-          console.log( racine.manche )           
+          equipe2[racine.manche-1] = racine.point                  
         }        
 
           if(racine.filsGauche !== null ){
-              console.log("gauche" + racine.valeur)
               Team1(racine.filsGauche);
           }
           if(racine.filsDroit !== null){
-              console.log("droit")
               Team1(racine.filsDroit);
           }
          

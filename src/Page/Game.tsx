@@ -79,6 +79,7 @@ const Game = (props: any) => {
   const [reset, setReset] = React.useState(false);
   const taille = useMediaQuery(theme.breakpoints.down('sm'));
   const [stop, setPause] = React.useState(false);
+  const [first, setFirst] = React.useState("");
 
   var sound1 = new Howl({
     src: [yes],
@@ -103,16 +104,18 @@ const Game = (props: any) => {
     
   },[])
  
-  const change = () => {
-    sound1.play();
-    if(position.suivant === null && file.longueur !== 0){
-      SetValeur(file.defiler().valeur);
+  const change = () => {    
+    sound1.play();    
+
+    if(position.suivant === null && file.longueur !== 0 ){
+      
       if(team === 0){
         setPoints1(point_equipe1+1)
       }
       else{
         setPoints2(point_equipe2+1)
       }
+      SetValeur(file.defiler().valeur);
     }
     else if (position.suivant === null && file.longueur === 0){
       
@@ -130,9 +133,7 @@ const Game = (props: any) => {
         
       }
       resultat.ajouter(manche*10, "equipe 1", manche+1,point_equipe1);    
-      resultat.ajouter(manche*10*3, "equipe 2", manche+1,point_equipe2);
-      console.log(point_equipe1)
-      console.log(point_equipe2)
+      resultat.ajouter(manche*10*3, "equipe 2", manche+1,point_equipe2);     
       setResultat(resultat)           
       SetGo(false)
       setPoints1(0);
@@ -141,8 +142,23 @@ const Game = (props: any) => {
       handleOpenManche()
     }
     else{
+      console.log("la")
+      console.log(first)
       console.log(position.valeur)
-     
+      if(position.valeur === first){
+        c.stop();
+        setPause(true);
+          if(team === 0){
+            SetTeam(1)                   
+          }
+          else{
+            SetTeam(0)             
+          }
+          setFirst("")
+         
+          timeOut()
+      }
+      else{
       if(team === 0){
         setPoints1(point_equipe1+1)
       }
@@ -151,7 +167,13 @@ const Game = (props: any) => {
       }    
       SetPosition(position.suivant);
       SetValeur(position.valeur);
+      console.log(position.suivant.valeur)
     }
+    }
+
+  
+
+
     
   }
   const timeOut = () => {
@@ -165,6 +187,21 @@ const Game = (props: any) => {
       handleOpen()
     }
         
+  }
+
+  const test = () => {
+    console.log("test")    
+    setPause(true);
+    setFirst("")     
+    setReset(true)  
+    if(team === 0){
+      SetTeam(1)
+      handleOpen()
+    }
+    else{
+      SetTeam(0)
+      handleOpen()
+    }
   }
 
   const EndGame = () => {
@@ -201,7 +238,7 @@ const Game = (props: any) => {
 
   const handleClose = () => {    
       SetGo(true)
-      setOpen(false)   
+      setOpen(false)  
       play();
   }
   const modal =
@@ -243,6 +280,9 @@ const Game = (props: any) => {
 
   const Passer = () => { 
     sound.play();
+    if(first === ""){
+      setFirst(valeur)
+    }
     var noeud = new Noeud(valeur)      
     file.enfiler(noeud);
     if(position.suivant !== null){
@@ -251,6 +291,18 @@ const Game = (props: any) => {
     }    
     else{
       SetValeur(file.defiler().valeur);
+    }
+    if(valeur === first){
+      c.stop();
+      setPause(true);
+        if(team === 0){
+          SetTeam(1)                   
+        }
+        else{
+          SetTeam(0)             
+        }
+        setFirst("")
+        timeOut()
     }
     }
 
@@ -268,13 +320,13 @@ const Game = (props: any) => {
     <Grid container className={classes.titre}>
       {taille === false &&
        <Grid container justify="center" alignItems="center" className={classes.affichage}>
-       <Affichage value={valeur}/>
+       <Affichage value={valeur} first={first} timeout={test}/>
        </Grid>
       }
 
 {taille === true &&
        <Grid container justify="center" alignItems="center" className={classes.affichage2}>
-       <Affichage value={valeur}/>
+       <Affichage value={valeur} first={first} timeout={test}/>
        </Grid>
       }
    

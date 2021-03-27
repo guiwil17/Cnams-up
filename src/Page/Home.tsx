@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 var test = new ListeChaine();
-
+// Permet de mélanger la liste
 const randomize = (tab:[])=>{
   var i, j, tmp;
   for (i = tab.length - 1; i > 0; i--) {
@@ -63,10 +63,10 @@ const randomize = (tab:[])=>{
   return tab;
 }
 
-//Création d'une liste chainée ici
+//Création d'une liste chainée et remplissage
+
 
 const Liste = () =>{
-  //console.log(data.celebrite[1]);
   var tab:any = [];
   for(var i=0; i < data.item.length; i++){
     var nbr = [4,16,2];
@@ -104,7 +104,6 @@ const Home: React.FC<{}> = () => {
 
  
   const Start = () =>{
-    console.log("ici")
     setJoue(false)
     setTeam(true)
   }
