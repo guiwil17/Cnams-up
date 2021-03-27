@@ -1,6 +1,5 @@
 const Affichage = (props: any) => {
-  const passer = () => {
-    console.log("==========")
+  const passer = () => {    
     props.timeout()
     }
   return (

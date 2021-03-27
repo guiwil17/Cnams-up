@@ -15,7 +15,8 @@ import {Howl, Howler} from 'howler';
 import VolumeDownIcon from '@material-ui/icons/VolumeDown';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 import LiveHelpIcon from '@material-ui/icons/LiveHelp';
-
+import info from './info'
+import Info from './info';
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(10),
@@ -99,6 +100,7 @@ const Home: React.FC<{}> = () => {
   const [reset, setReset] = React.useState(test);
   const [team, setTeam] = React.useState(false);
   const [manche, setManche] = React.useState(false);
+  const [info, setInfo] = React.useState(false);
   const taille = useMediaQuery(theme.breakpoints.down('sm')); 
   const [joue, setJoue] = React.useState(false);
 
@@ -131,6 +133,12 @@ const Home: React.FC<{}> = () => {
     else{
       setJoue(true)
     }
+  }
+  const handleOpenInfo = () => {
+    setInfo(true)
+  }
+  const handleCloseInfo = () => {
+    setInfo(false)
   }
 
   const Liste = () =>{
@@ -332,7 +340,7 @@ const manche1 =
     <>
     {taille === false && joue === false &&
     <Grid container className={classes.bandeau}>
-      <Grid item md={4}><Button><LiveHelpIcon style={{ fontSize: 80 }}/></Button></Grid>
+      <Grid item md={4}><Button onClick={()=>handleOpenInfo()}><LiveHelpIcon style={{ fontSize: 80 }}/></Button></Grid>
       <Grid item md={4}></Grid>
       <Grid item md={4}><Button onClick={()=>changeIconeJoue()}><VolumeOffIcon style={{ fontSize: 80 }}/></Button></Grid>
     </Grid>
@@ -417,7 +425,7 @@ const manche1 =
       
          <Audio joue={joue}/>
        
-       
+       <Info open={info} close={handleCloseInfo}/>
     </>
   );
 };
