@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Grid, Typography, Button, useMediaQuery, Dialog } from '@material-ui/core';
 import Game from './Game';
@@ -8,14 +8,10 @@ import * as data from './Game/data.json';
 import carte from '../img/carte.png'
 import logo from '../img/logo.png'
 import teamimg from '../img/team.png'
-import boing from './boing.mp3'
-import accueil from './accueil.mp3'
 import Audio from "./Game/Audio"
-import {Howl, Howler} from 'howler';
 import VolumeDownIcon from '@material-ui/icons/VolumeDown';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 import LiveHelpIcon from '@material-ui/icons/LiveHelp';
-import info from './info'
 import Info from './info';
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -66,9 +62,9 @@ const randomize = (tab:[])=>{
 
 //Création d'une liste chainée et remplissage
 
-
+var tab:any = [];
 const Liste = () =>{
-  var tab:any = [];
+  tab= [];
   for(var i=0; i < data.item.length; i++){
     var nbr = [4,16,2];
     var trouve: number[] = [] 
@@ -104,17 +100,18 @@ const Home: React.FC<{}> = () => {
   const taille = useMediaQuery(theme.breakpoints.down('sm')); 
   const [joue, setJoue] = React.useState(false);
 
+  const InfoStart = () => {
+    setInfo(false)
+    setJoue(false)
+    setTeam(true)
+  }
  
   const Start = () =>{
     setJoue(false)
     setTeam(true)
   }
 
-  const End = () => {
-    setPlay(false);
-    setReset(Liste());
-  }
-
+ 
 
   const CloseTeam = () =>{
     setTeam(false)
@@ -143,6 +140,7 @@ const Home: React.FC<{}> = () => {
 
   const Liste = () =>{
     var tab:any = [];
+    test = new ListeChaine();
     for(var i=0; i < data.item.length; i++){
       var nbr = [4,16,2];
       var trouve: number[] = [] 
@@ -158,12 +156,19 @@ const Home: React.FC<{}> = () => {
       }
     }
     tab = randomize(tab);
+    console.log(tab)
     for(var v=0;v < tab.length; v++){
       let m = new Maillon(tab[v]);
       test.Ajouter(m)
     }
     return test
   }
+
+  const End = () => {
+    setPlay(false);
+    setReset(Liste());
+  }
+
 
 
   const equipe =
@@ -200,7 +205,7 @@ const Home: React.FC<{}> = () => {
     <>  
     <Grid container justify="center" alignItems="center" className={classes.titre2}>
    
-    <Typography variant="h5" component="h3" gutterBottom className={classes.alignement}> Constitué vos équipes </Typography>
+    <Typography variant="h5" component="h3" gutterBottom className={classes.alignement}> Constituez vos équipes </Typography>
     <img src={teamimg}  height="150" alt='Logo équipe'></img>
            
     </Grid>
@@ -223,7 +228,7 @@ const Home: React.FC<{}> = () => {
     <>  
     <Grid container justify="center" alignItems="center" className={classes.titre2}>
    
-    <Typography variant="h4" component="h3" gutterBottom className={classes.alignement}> Constitué vos équipes <br></br>
+    <Typography variant="h4" component="h3" gutterBottom className={classes.alignement}> Constituez vos équipes <br></br>
     
     <img src={teamimg}  height="250" alt='Logo équipe'></img>
     </Typography>
@@ -286,7 +291,7 @@ const manche1 =
   Vous devez décrire <b>les mots</b>. <br></br>
   Vous ne pouvez pas <b>prononcer des mots de la même famille</b> ou qui <b>'sonnent pareil'</b>.<br></br>
    Vous ne pouvez pas traduire les mots ou épeler le mot. <br></br>
-   Vous pouvez passser les mots en <b>touchant la croix</b> ou <b>les valider avec le boutton vert</b>.         </Typography>
+   Vous pouvez passer les mots en <b>touchant la croix</b> ou <b>les valider avec le bouton vert</b>.         </Typography>
   </Grid>
      
 
@@ -311,7 +316,7 @@ const manche1 =
   Vous devez décrire <b>les mots</b>. <br></br>
   Vous ne pouvez pas <b>prononcer des mots de la même famille</b> ou qui <b>'sonnent pareil'</b>.<br></br>
    Vous ne pouvez pas traduire les mots ou épeler le mot. <br></br>
-   Vous pouvez passser les mots en <b>touchant la croix</b> ou <b>les valider avec le boutton vert</b>.
+   Vous pouvez passer les mots en <b>touchant la croix</b> ou <b>les valider avec le bouton vert</b>.
          </Typography>
          
   </Grid>
@@ -348,7 +353,7 @@ const manche1 =
 
 {taille === false && joue &&
     <Grid container className={classes.bandeau}>
-      <Grid item md={4}><Button><LiveHelpIcon style={{ fontSize: 80 }}/></Button></Grid>
+      <Grid item md={4}><Button onClick={()=>handleOpenInfo()}><LiveHelpIcon style={{ fontSize: 80 }}/></Button></Grid>
       <Grid item md={4}></Grid>
       <Grid item md={4}><Button onClick={()=>changeIconeJoue()}><VolumeDownIcon style={{ fontSize: 80 }}/></Button></Grid>
     </Grid>
@@ -358,7 +363,7 @@ const manche1 =
 
  
     <Grid container className={classes.bandeau}>
-      <Grid item xs={4}><Button><LiveHelpIcon style={{ fontSize: 60 }}/></Button></Grid>
+      <Grid item xs={4}><Button onClick={()=>handleOpenInfo()}><LiveHelpIcon style={{ fontSize: 60 }}/></Button></Grid>
       <Grid item xs={4}></Grid>
       <Grid item xs={4}><Button onClick={()=>changeIconeJoue()}><VolumeOffIcon style={{ fontSize: 60 }}/></Button></Grid>
     </Grid>
@@ -369,7 +374,7 @@ const manche1 =
 
  
 <Grid container className={classes.bandeau}>
-  <Grid item xs={4}><Button><LiveHelpIcon style={{ fontSize: 60 }}/></Button></Grid>
+  <Grid item xs={4}><Button onClick={()=>handleOpenInfo()}><LiveHelpIcon style={{ fontSize: 60 }}/></Button></Grid>
   <Grid item xs={4}></Grid>
   <Grid item xs={4}><Button onClick={()=>changeIconeJoue()}><VolumeDownIcon style={{ fontSize: 60 }}/></Button></Grid>
 </Grid>
@@ -417,7 +422,7 @@ const manche1 =
       </>
       }
        {play===true &&
-       <Game end={End} reset={reset}/>
+       <Game end={End} reset={reset} melange={tab}/>
        }
 
        {manche1}
@@ -425,7 +430,7 @@ const manche1 =
       
          <Audio joue={joue}/>
        
-       <Info open={info} close={handleCloseInfo}/>
+       <Info open={info} close={handleCloseInfo} start={InfoStart}/>
     </>
   );
 };

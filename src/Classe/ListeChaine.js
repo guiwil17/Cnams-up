@@ -1,17 +1,23 @@
 import Maillon from './Maillon';
 
   class ListeChaine {
+    
+    //représente le premier maillon de la liste
     premier;
+
+    //constructeur de la classe
     constructor() {
         this.premier = null;
      } 
 
+     //Permet d'ajouter un élément à la liste
    Ajouter(nvValeur) {
         var nvTete = nvValeur;
 	    nvTete.suivant = this.premier;
 		this.premier = nvTete;
 	}
 
+  //permet de retirer et de retirer la valeur de la première occurence
     retirerPremiereOccurrence_Rec(l,v) {
 		let retour = l;
 		if(l !== null) {		
@@ -39,7 +45,8 @@ import Maillon from './Maillon';
             },v);
 		}
 	}   
-	
+
+  //permet de mélanger la liste
     Melanger(){
       var liste = []
       var nouvelle = new ListeChaine();
@@ -70,10 +77,11 @@ import Maillon from './Maillon';
         }       
       }
 
-      console.log(nouvelle.Longueur());
-      nouvelle.Afficher();
+      return nouvelle;
 
     }
+
+//permet un affichage console de la liste
     Afficher() {
 		let c = this.premier;
 		console.log("[");

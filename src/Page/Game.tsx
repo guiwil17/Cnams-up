@@ -11,10 +11,12 @@ import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
 import mot from '../img/mot.png'
 import GroupIcon from '@material-ui/icons/Group';
-import yes from './yes.mp3'
-import no from './no.mp3'
-import chrono from './chrono.mp3'
-import {Howl, Howler} from 'howler';
+import yes from '../Sound/yes.mp3'
+import no from '../Sound/no.mp3'
+import chrono from '../Sound/chrono.mp3'
+import {Howl} from 'howler';
+import ListeChaine from '../Classe/ListeChaine';
+import Maillon from '../Classe/Maillon';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -58,6 +60,17 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+// Permet de mélanger la liste
+const randomize = (tab:[])=>{
+  var i, j, tmp;
+  for (i = tab.length - 1; i > 0; i--) {
+      j = Math.floor(Math.random() * (i + 1));
+      tmp = tab[i];
+      tab[i] = tab[j];
+      tab[j] = tmp;
+  }
+  return tab;
+}
 
 
 var c:any;
@@ -78,19 +91,21 @@ const Game = (props: any) => {
   const [resultat, setResultat] = React.useState(new ArbreBinaire(-1, "début", 0));
   const [reset, setReset] = React.useState(false);
   const taille = useMediaQuery(theme.breakpoints.down('sm'));
-  const [stop, setPause] = React.useState(false);
   const [first, setFirst] = React.useState("");
 
   var sound1 = new Howl({
     src: [yes],
+    volume: 0.25
   });
   var sound = new Howl({
     src: [no],
+    volume: 0.25
   });
 
   var ch = new Howl({
     src: [chrono],
-    html5: true
+    html5: true,
+    volume: 1
   });
  
   const  play = () => {
@@ -99,9 +114,7 @@ const Game = (props: any) => {
 
   }
   useEffect(()=>{
-      play()
-    
-    
+      play()        
   },[])
  
   const change = () => {    
@@ -120,7 +133,6 @@ const Game = (props: any) => {
     else if (position.suivant === null && file.longueur === 0){
       
       c.stop();
-    setPause(true);
       if(team === 0){
         setPoints1(point_equipe1+1)
         SetTeam(1)
@@ -147,7 +159,6 @@ const Game = (props: any) => {
       console.log(position.valeur)
       if(position.valeur === first){
         c.stop();
-        setPause(true);
           if(team === 0){
             SetTeam(1)                   
           }
@@ -191,7 +202,7 @@ const Game = (props: any) => {
 
   const test = () => {
     console.log("test")    
-    setPause(true);
+    c.stop()
     setFirst("")     
     setReset(true)  
     if(team === 0){
@@ -210,9 +221,18 @@ const Game = (props: any) => {
 
   const AddManche = () =>{
     setManche(manche+1)
-    if(manche < 2){
-      SetValeur(props.reset.premier.valeur)
-      SetPosition(props.reset.premier.suivant)
+    
+    if(manche < 2){   
+      var t = new ListeChaine();
+      var tab = [];
+      tab = randomize(props.melange);
+      for(var v=0;v < tab.length; v++){
+        let m = new Maillon(tab[v]);
+        t.Ajouter(m)
+      }   
+      console.log(tab)
+      SetValeur(t.premier.valeur)
+      SetPosition(t.premier.suivant)
       SetGo(true)      
     }    
     else{
@@ -294,7 +314,6 @@ const Game = (props: any) => {
     }
     if(valeur === first){
       c.stop();
-      setPause(true);
         if(team === 0){
           SetTeam(1)                   
         }

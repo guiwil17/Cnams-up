@@ -1,6 +1,6 @@
 class Noeud{
   
-
+    //Constructeur du Noeud
     constructor(valeur, precedent=null, suivant=null){
         this.valeur = valeur;
         this.suivant = suivant;

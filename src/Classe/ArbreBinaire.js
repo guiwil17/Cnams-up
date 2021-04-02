@@ -1,10 +1,12 @@
 import Element from './Element';
 
 class ArbreBinaire {
+    //constructeur de la classe 
     constructor(racine, equipe, manche, point) {
         this.racine = new Element(racine, equipe, manche, point);
      }
-
+     
+     //Permet d'ajouter un élément à l'arbre binaire
      ajouter(valeur, equipe, manche, point){
          if(this.racine === null){
              this.racine = new Element(valeur, equipe, manche, point)
@@ -13,11 +15,12 @@ class ArbreBinaire {
              this.racine.ajouter(valeur, equipe, manche, point)
          }
      }
-
+     //permet d'afficher le graphe dans la console
      afficher(){
          this.racine.afficher()
      }
 
+     //Permet de récupérer la hauteur de l'arbre
      getHauteur(){
         var hauteur;
          if(this.racine === null){
@@ -29,6 +32,7 @@ class ArbreBinaire {
          return hauteur
      }
 
+     //Permet de récupérer la taille de l'arbre
      getTaille(){
          var taille;
          if(this.racine === null){
@@ -40,15 +44,17 @@ class ArbreBinaire {
          return taille;
      }
 
+     //Récupère l'élement minimum
      getMinimum(){
       return this.racine.minimum()
      }
-
+//Récupère l'élement maximum
      getMaximum(){
          return this.racine.maximum();
      }
 }
 
+//Phase de test de l'arbre
 /*
 r = new ArbreBinaire(6, "équipe 1", 1)
 r.ajouter(18, "équipe 2", 1)

@@ -1,8 +1,8 @@
-import {Howl, Howler} from 'howler';
+import {Howl} from 'howler';
 import React from 'react';
 import { useEffect } from 'react';
-import accueil from '../accueil.mp3'
-import go from '../go.mp3'
+import accueil from '../../Sound/accueil.mp3'
+import go from '../../Sound/go.mp3'
 
 var s:any;
 var s2:any;
@@ -12,10 +12,12 @@ const Audio = (props:any) => {
     var sound = new Howl({
         src: [accueil],
         preload : true,
+        volume: 2
           });
       var sound2 = new Howl({
         src: [go],
         preload : true,
+        volume: 0.5
       });
     
     const play = () => {

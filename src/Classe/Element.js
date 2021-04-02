@@ -1,4 +1,6 @@
 class Element {
+    //Constructeur d'un élement de l'arbre
+    // On stock l'équipe, les points, le numéro de manche, le fils droit, le fils gauche et la valeur
     constructor(valeur, equipe, manche, point){
         this.valeur = valeur;
         this.equipe = equipe;
@@ -8,6 +10,7 @@ class Element {
         this.filsGauche = null;
     }
 
+    //Permet d'ajouter un élément à l'arbre
     ajouter(valeur, equipe, manche, point){
         if(equipe === "equipe 1"){
             if(this.filsGauche === null){
@@ -27,6 +30,7 @@ class Element {
         }    
     }
 
+    //Permet l'affichage dans la console de l'élément
     afficher(level){
         
         level = level || 0;
@@ -43,6 +47,7 @@ class Element {
         }
     }
 
+    //Permet de calculer la hauteur de l'arbre
     hauteur(){
         var gauche;
         var droit;
@@ -61,6 +66,7 @@ class Element {
         return 1 + Math.max(gauche, droit);
     }
 
+    //Permet de calculer la taille de l'arbre
     taille(){
         var gauche;
         var droit;
@@ -80,6 +86,7 @@ class Element {
         return 1 + gauche + droit;
     }
 
+    //Permet de calculer le minimum de l'arbre
     minimum(){
         var minimum;
         if(this.filsGauche === null){
@@ -92,6 +99,7 @@ class Element {
         return minimum;
     }
 
+    //Permet de calculer le maximum de l'arbre
     maximum(){
         var maximum;
         if(this.filsDroit === null){
