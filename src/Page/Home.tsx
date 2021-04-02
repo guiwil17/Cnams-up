@@ -66,7 +66,7 @@ var tab:any = [];
 const Liste = () =>{
   tab= [];
   for(var i=0; i < data.item.length; i++){
-    var nbr = [4,16,2];
+    var nbr = [5,20,4];
     var trouve: number[] = [] 
     for(var j=0;j < nbr[i]; j++){
       let indice = Math.floor(Math.random()*data.item[i].length)
@@ -142,7 +142,7 @@ const Home: React.FC<{}> = () => {
     var tab:any = [];
     test = new ListeChaine();
     for(var i=0; i < data.item.length; i++){
-      var nbr = [4,16,2];
+      var nbr = [5,20,4];
       var trouve: number[] = [] 
       for(var j=0;j < nbr[i]; j++){
         let indice = Math.floor(Math.random()*data.item[i].length)
